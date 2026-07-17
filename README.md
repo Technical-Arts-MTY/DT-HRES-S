@@ -1,6 +1,16 @@
-# DT-HRES-S
+<h1 align="center">DT-HRES-S</h1>
 
-Gemelo digital de un sistema híbrido de energía renovable, en formato de instrumento educativo para comunidades indígenas.
+<p align="center">
+Digital twin of a hybrid renewable energy system,<br>
+built as an educational instrument for indigenous communities.
+</p>
+
+<p align="center">
+<img src="https://img.shields.io/badge/EPICS%20in%20IEEE-2025--2026-1f6feb">
+<img src="https://img.shields.io/badge/license-CC%20BY--NC--SA%204.0-lightgrey">
+<img src="https://img.shields.io/badge/python-3.11-blue">
+<img src="https://img.shields.io/badge/hardware-Raspberry%20Pi%205-c51a4a">
+</p>
 
 <table>
 <tr>
@@ -9,13 +19,13 @@ Gemelo digital de un sistema híbrido de energía renovable, en formato de instr
 <tr>
 <td>
 
-### El instrumento completo
+### The full instrument
 
-Dos cajas acopladas por la parte trasera. Al frente, la unidad de control en coraza impresa en 3D negra: pantalla tras ventana de acrílico, rueda y tres botones, verde, ámbar y rojo. Las bisagras laterales abren hacia los componentes internos.
+Two enclosures joined at the back. In front, the control unit in a black 3D-printed shell: display behind an acrylic window, a rotary wheel and three buttons, green, amber and red. Side hinges open to the internal components.
 
-Detrás, el instrumento observador: caja de paredes de acrílico, con abertura circular en la parte superior y ductos de ventilación en la base, que aloja el circuito de principios armado en protoboard, con panel solar y batería encendiendo una bombilla.
+Behind it, the observer instrument: an acrylic-walled box, with a circular opening on top and ventilation ducts at the bottom, housing the principles circuit built on a breadboard, with a solar panel and a battery lighting a bulb.
 
-El circuito de la caja trasera es el sistema físico. La pantalla del frente es el gemelo digital de ese mismo sistema.
+The circuit in the rear box is the physical system. The screen in front is the digital twin of that same system.
 
 </td>
 </tr>
@@ -29,106 +39,167 @@ El circuito de la caja trasera es el sistema físico. La pantalla del frente es 
 <tr>
 <td valign="top">
 
-**Unidad de control**
+**Control unit**
 
-Raspberry Pi 5 con la pantalla protegida por acrílico. El modelo entrenado corre aquí, sin conexión a internet.
+Raspberry Pi 5 with the display shielded by acrylic. The trained model runs here, with no internet connection.
 
 </td>
 <td valign="top">
 
-**Instrumento observador**
+**Observer instrument**
 
-Caja de acrílico con abertura circular superior y ventilación inferior. El armado queda a la vista, conexión por conexión.
+Acrylic box with a circular opening on top and ventilation at the bottom. The wiring stays visible, connection by connection.
 
 </td>
 </tr>
 </table>
 
-## Contexto
+<h2 align="center">Context</h2>
 
-El instrumento está dirigido a comunidades indígenas que operan o evalúan operar un sistema híbrido de energía renovable.
+The instrument is aimed at indigenous communities that operate, or are evaluating whether to operate, a hybrid renewable energy system.
 
-Donde ya existe una instalación, la réplica de la caja trasera reproduce a escala lo que ocurre en ella, y la pantalla del frente traduce ese comportamiento a números y gráficas: producción del panel a lo largo del día, estado de la batería, consumo cubierto.
+Where an installation already exists, the rear box reproduces at scale what happens in it, and the front screen translates that behavior into numbers and charts: panel output through the day, battery state, demand covered.
 
-Donde todavía no hay instalación, el armado en protoboard queda expuesto a propósito. Cada conexión se sigue a simple vista, se mide y se reproduce con material local. El gemelo digital, entrenado con datos meteorológicos, estima el tamaño de panel, turbina y batería que corresponde al consumo de la comunidad.
+Where there is no installation yet, the breadboard build is left exposed on purpose. Every connection can be traced by eye, measured, and reproduced with local material. The digital twin, trained on meteorological data, estimates the panel, turbine and battery size that fits the community's demand.
 
-## Cómo está armado
+The project replaces closed-license commercial software, such as HOMER or PVsyst, with an open tool that any community member can open, read and modify.
 
-La unidad de control lleva una Raspberry Pi 5 dentro de una coraza impresa en 3D. La pantalla de 7 pulgadas va detrás de una ventana de acrílico, sin táctil: la interacción ocurre con una rueda giratoria y tres botones de panel. La rueda mueve la selección y confirma al presionarla; el verde avanza, el ámbar regresa, el rojo reinicia la captura. Las bisagras abren la coraza hacia los componentes, accesibles para mantenimiento o para mostrar el interior durante un taller.
+<h2 align="center">How it's built</h2>
 
-El instrumento observador va aparte y se conecta por la parte trasera. Sus paredes de acrílico dejan ver el circuito completo. La abertura circular superior deja pasar la luz hacia el panel solar, y los ductos de la base mantienen el flujo de aire sobre los componentes.
+The control unit houses a Raspberry Pi 5 inside a 3D-printed shell. The 7-inch display sits behind an acrylic window, no touch: interaction happens through a rotary wheel and three panel buttons. The wheel moves the selection and confirms on press; green advances, amber goes back, red restarts the entry. The hinges open the shell toward the components, accessible for maintenance or to show the interior during a workshop.
 
-## Del Colab a la Raspberry
+Dropping touch is deliberate. A capacitive screen does not respond to wet hands, forces the surface to stay exposed, and degrades in salty coastal climate. With a wheel and buttons, the screen stays sealed behind the acrylic and the instrument still works even when the screen is hard to see under direct sun.
 
-El entrenamiento vive en Google Colab y no se mueve de ahí. El conjunto de datos se genera con la simulación física del repositorio, barriendo combinaciones de tamaño de panel, turbina y batería sobre los años meteorológicos típicos de cuatro ciudades. Sobre ese conjunto se entrenan y comparan árbol de decisión, bosque aleatorio, máquina de vectores de soporte y red neuronal, con validación dejando una ciudad fuera, que mide la respuesta del modelo en un sitio que nunca vio.
+The observer instrument sits apart and connects at the back. Its acrylic walls leave the full circuit visible. The circular opening on top lets light reach the solar panel, and the ducts at the base keep airflow over the components.
 
-A la Raspberry se copia únicamente el resultado: el modelo ganador serializado con joblib y los datos meteorológicos precargados. El dispositivo no entrena, solo hace inferencia, y esa inferencia corre en la CPU de la Pi en milisegundos. No lleva acelerador de IA porque el bosque aleatorio no lo requiere; esa decisión se revisa solo si un modelo más pesado demuestra ventaja medible en latencia y precisión sobre el hardware real.
+<h2 align="center">From Colab to the Raspberry Pi</h2>
 
-## Instrumentos
+Training lives in Google Colab and stays there. The dataset is generated with the repository's physics simulation, sweeping panel, turbine and battery sizes over the typical meteorological years of four cities. On that dataset, a decision tree, random forest, support vector machine and neural network are trained and compared, with leave-one-city-out validation, which measures how the model responds at a site it has never seen.
 
-### Unidad de control
+Only the result is copied to the Raspberry Pi: the winning model, serialized with joblib, and the preloaded meteorological data. The device does not train, it only runs inference, and that inference runs on the Pi's CPU in milliseconds. It carries no AI accelerator because the random forest does not need one; that decision is revisited only if a heavier model shows a measurable advantage in latency and accuracy on the actual hardware.
 
-| Componente | Especificación |
+| Stage | Where it happens |
+|---|---|
+| Dataset generation | Colab |
+| Training and comparison of the four algorithms | Colab |
+| Leave-one-city-out validation | Colab |
+| Serialization of the winning model | Colab |
+| Inference on the community's demand | Raspberry Pi |
+| Local sensor readings | Raspberry Pi |
+
+<h2 align="center">Open in Colab</h2>
+
+<p align="center">
+
+| Notebook | Content | |
+|---|---|---|
+| 11 | Digital twin prototype, from physics simulation to trained model | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Technical-Arts-MTY/DT-HRES-S/blob/main/notebooks/11_digital_twin_prototype.ipynb) |
+| 12 | Community interface, sizing with interactive sliders | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Technical-Arts-MTY/DT-HRES-S/blob/main/notebooks/12_community_interface.ipynb) |
+| 13 | Walkthrough of the 4D methodology | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Technical-Arts-MTY/DT-HRES-S/blob/main/notebooks/13_4D_methodology_walkthrough.ipynb) |
+
+</p>
+
+The notebooks clone the repository and install dependencies in the first cell. No local install or license required.
+
+<h2 align="center">4D Methodology</h2>
+
+```
+DT-HRES-S
+│
+├── 1D  Concept          theory and equations of the system
+├── 2D  Body             optimization objectives and interface
+├── 3D  Mind             sensors, data and uncertainty
+└── 4D  Spirit           physical arrangement, blocks and losses
+    │
+    ├── HRES 1  theory and equations
+    ├── HRES 2  optimization objectives
+    ├── HRES 3  understanding the sensors
+    ├── HRES 4  digital shadow on synthetic data
+    ├── HRES 5  replacement with real data
+    ├── HRES 6  model self-correction
+    └── HRES 7  forecasting with machine learning
+```
+
+[Full 4D methodology](docs/4D_methodology/)
+
+<h2 align="center">Instruments</h2>
+
+### Control unit
+
+| Component | Specification |
 |---|---|
 | Raspberry Pi 5 | 8 GB RAM |
-| Almacenamiento | microSD industrial 64 GB, SSD USB 256 GB |
-| Pantalla | 7", 1024x600, IPS, tras ventana de acrílico |
-| Rueda | encoder rotatorio con pulsador, eje metálico |
-| Botones | 22 mm, IP67, verde, ámbar, rojo |
-| Coraza | impresión 3D negra, con bisagras |
-| Disipación | disipador activo con ventilador |
+| Storage | 64 GB industrial microSD, 256 GB USB SSD |
+| Display | 7", 1024x600, IPS, behind acrylic window |
+| Wheel | rotary encoder with push button, metal shaft |
+| Buttons | 22 mm, IP67, green, amber, red |
+| Shell | black 3D print, with hinges |
+| Cooling | active heatsink with fan |
+| Power | 20 W panel, 10 A PWM controller, 12 V 20 Ah LiFePO4 battery |
 
-### Instrumento observador
+### Observer instrument
 
-| Componente | Especificación |
+| Component | Specification |
 |---|---|
-| Panel solar | 20 W, 12 V |
-| Batería | LiFePO4 12 V |
-| Controlador de carga | PWM 10 A |
-| Carga | bombilla |
-| Montaje | protoboard a la vista |
-| Caja | acrílico, abertura circular superior, ductos de ventilación inferiores |
+| Solar panel | 20 W, 12 V |
+| Battery | 12 V LiFePO4 |
+| Charge controller | 10 A PWM |
+| Load | light bulb |
+| Mounting | breadboard, left exposed |
+| Enclosure | acrylic, circular opening on top, ventilation ducts at the bottom |
 
-### Sensores meteorológicos, opcionales
+### Meteorological sensors, optional
 
-| Componente | Especificación |
+| Component | Specification |
 |---|---|
-| Piranómetro | irradiancia global |
-| BME280 | temperatura, humedad, presión |
-| Anemómetro | copas, salida de pulsos |
+| Pyranometer | global irradiance |
+| BME280 | temperature, humidity, pressure |
+| Anemometer | cup type, pulse output |
 
-## Software
+Without the sensors, the instrument runs on the preloaded meteorological years. The sensors allow that data to be checked against the site's own measurements.
 
-| Capa | Contenido |
+<h2 align="center">Software</h2>
+
+| Layer | Content |
 |---|---|
-| Sistema | Raspberry Pi OS Lite |
-| Cálculo | Python 3.11, scikit-learn, joblib, pandas, numpy |
-| Interfaz | pantalla completa, sin escritorio |
-| Entrada | gpiozero para rueda y botones |
-| Arranque | servicio systemd al encender |
+| System | Raspberry Pi OS Lite |
+| Computation | Python 3.11, scikit-learn, joblib, pandas, numpy |
+| Interface | full screen, no desktop |
+| Input | gpiozero for the wheel and buttons |
+| Startup | systemd service on power-up |
 
-## Repositorio
+<h2 align="center">Repository</h2>
 
-| Carpeta | Contenido |
-|---|---|
-| data/ | años meteorológicos típicos de cuatro ciudades |
-| src/ | modelos físicos, simulador y modelos de aprendizaje |
-| notebooks/ | prototipo, interfaz comunitaria y recorrido de la metodología |
-| docs/ | metodología y guía de investigación |
-| tests/ | pruebas de los módulos |
+```
+DT-HRES-S
+│
+├── data/           typical meteorological years for four cities
+├── src/            physical models, simulator and learning models
+├── notebooks/      prototype, community interface and methodology walkthrough
+├── docs/           4D methodology, research guide and images
+├── tests/          module tests
+└── requirements.txt
+```
 
-## Documentación
+<h2 align="center">Documentation</h2>
 
-[Metodología 4D](docs/4D_methodology/)
+[4D Methodology](docs/4D_methodology/)
 
-[Guía de investigación](docs/RESEARCH_GUIDE.md)
+[Research Guide](docs/RESEARCH_GUIDE.md)
 
-## Licencia
+<h2 align="center">License</h2>
 
-CC BY-NC-SA 4.0
+<p align="center">CC BY-NC-SA 4.0</p>
 
 ---
 
-EPICS in IEEE 2025-2026 | Tecnológico de Monterrey | Technical Arts, capítulo estudiantil ITESM
+### Note on the final form
 
+The specifications on this page describe the reference design. The instrument's final form may vary with material availability: the shell can be built to other dimensions, components can be swapped for local equivalents, and the observer instrument can be assembled with whatever panel, battery and load are available in the region. What stays fixed is the separation between the two boxes, visual access to the circuit, and operation without touch or an internet connection.
+
+---
+
+<p align="center">
+EPICS in IEEE 2025-2026 | Tecnológico de Monterrey | Technical Arts, ITESM Student Chapter<br>
 Project lead | PhD Rasikh Tariq
+</p>
