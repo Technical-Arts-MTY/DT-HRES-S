@@ -45,7 +45,6 @@ If you're a new contributor:
 1. Read [01_concept_HRES.md](01_concept_HRES.md) — understand WHAT we're building
 2. Read [02_body_optimization.md](02_body_optimization.md) — understand WHY (the optimization goals)
 3. Read [06_roadmap_HRES1_to_7.md](06_roadmap_HRES1_to_7.md) — see where YOU fit in
-4. Read [07_team_responsibilities.md](07_team_responsibilities.md) — see who owns what, by dimension
 5. Pick a task aligned with your skills and the current stage
 6. Read the relevant `src/*.py` module to understand the existing code
 
