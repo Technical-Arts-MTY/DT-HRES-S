@@ -19,13 +19,13 @@ built as an educational instrument for indigenous communities.
 <tr>
 <td>
 
-### The full instrument
+### Overview
 
-Two enclosures joined at the back. In front, the control unit in a black 3D-printed shell: display behind an acrylic window, a rotary wheel and three buttons, green, amber and red. Side hinges open to the internal components.
+Two enclosures wired at the back. In front, the control unit in a black 3D-printed shell: display behind an acrylic window, a rotary wheel and three buttons, green, yellow and red. Side hinges open to the internal components.
 
-Behind it, the observer instrument: an acrylic-walled box, with a circular opening on top and ventilation ducts at the bottom, housing the principles circuit built on a breadboard, with a solar panel and a battery lighting a bulb.
+In the left, the observer instrument: an acrylic-walled box, with a circular opening on top and ventilation ducts at the bottom, housing the principles circuit built on a breadboard, with a solar panel and a battery lighting a bulb.
 
-The circuit in the rear box is the physical system. The screen in front is the digital twin of that same system.
+The circuit in the rear box is the physical system. The screen device is the digital twin of that same system.
 
 </td>
 </tr>
@@ -46,7 +46,7 @@ Raspberry Pi 5 with the display shielded by acrylic. The trained model runs here
 </td>
 <td valign="top">
 
-**Observer instrument**
+**HRES-BOX**
 
 Acrylic box with a circular opening on top and ventilation at the bottom. The wiring stays visible, connection by connection.
 
@@ -56,7 +56,7 @@ Acrylic box with a circular opening on top and ventilation at the bottom. The wi
 
 <h2 align="center">Context</h2>
 
-The instrument is aimed at indigenous communities that operate, or are evaluating whether to operate, a hybrid renewable energy system.
+The instrument is aimed at indigenous communities that operate, or are evaluating whether to operate, a hybrid renewable energy system. 
 
 Where an installation already exists, the rear box reproduces at scale what happens in it, and the front screen translates that behavior into numbers and charts: panel output through the day, battery state, demand covered.
 
@@ -64,7 +64,9 @@ Where there is no installation yet, the breadboard build is left exposed on purp
 
 The project replaces closed-license commercial software, such as HOMER or PVsyst, with an open tool that any community member can open, read and modify.
 
-<h2 align="center">How it's built</h2>
+<h2 align="center">Built</h2>
+
+Aiming the system to be operable under outdoor conditions, the system is built with a closed architecture, putting the electronical components inside a 3D-Printed shell, and the Digital Twin screen behind an acrylic protection. 
 
 The control unit houses a Raspberry Pi 5 inside a 3D-printed shell. The 7-inch display sits behind an acrylic window, no touch: interaction happens through a rotary wheel and three panel buttons. The wheel moves the selection and confirms on press; green advances, amber goes back, red restarts the entry. The hinges open the shell toward the components, accessible for maintenance or to show the interior during a workshop.
 
