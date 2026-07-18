@@ -95,13 +95,11 @@ Only the result is copied to the Raspberry Pi: the winning model, serialized wit
 
 | Notebook | Content | |
 |---|---|---|
-| 11 | Digital twin prototype, from physics simulation to trained model | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Technical-Arts-MTY/DT-HRES-S/blob/main/notebooks/11_digital_twin_prototype.ipynb) |
-| 12 | Community interface, sizing with interactive sliders | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Technical-Arts-MTY/DT-HRES-S/blob/main/notebooks/12_community_interface.ipynb) |
-| 13 | Walkthrough of the 4D methodology | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Technical-Arts-MTY/DT-HRES-S/blob/main/notebooks/13_4D_methodology_walkthrough.ipynb) |
+| 20 | Consolidated model and interface for Raspberry Pi | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Technical-Arts-MTY/DT-HRES-S/blob/main/notebooks/20_raspberry_deployment.ipynb) |
 
 </p>
 
-The notebooks clone the repository and install dependencies in the first cell. No local install or license required.
+The notebook clones the repository and installs dependencies in the first cell. No local install or license required.
 
 <h2 align="center">4D Methodology</h2>
 
@@ -177,7 +175,7 @@ DT-HRES-S
 │
 ├── data/           typical meteorological years for four cities
 ├── src/            physical models, simulator and learning models
-├── notebooks/      prototype, community interface and methodology walkthrough
+├── notebooks/      consolidated model and interface for the Raspberry Pi
 ├── docs/           4D methodology, research guide and images
 ├── tests/          module tests
 └── requirements.txt
