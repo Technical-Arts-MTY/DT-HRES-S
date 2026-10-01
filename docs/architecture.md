@@ -57,7 +57,11 @@ data_loader ────┐
             wind_model ──┼──→ hres_simulator ──→ (training data) ──→ ml_models
             battery_model┘                                            │
                                                                        ↓
-                                                              dt_hres_s_v1.pkl
+                                                              tuning (nested LOCO,
+                                                              model selection)
+                                                                       │
+                                                                       ↓
+                                                              dt_hres_s_deployment.joblib
                                                                        │
                                                                        ↓
                                                               validation
@@ -82,7 +86,8 @@ DataFrame with physics outputs:
   • p_wind_W
   • soc, p_unserved_W, ...
             │
-            ↓  ml_models.cyclical_encode() + benchmark()
+            ↓  ml_models.cyclical_encode() + benchmark()     (quick, random split)
+            ↓  tuning.run()                                   (nested leave-one-city-out)
             │
         Trained model + metrics
             │
@@ -106,6 +111,8 @@ Selection criteria (Task 3.4):
 3. Inference time < 100 ms for 1 year of data
 4. Reproducibility: fixed random seeds, version-locked dependencies
 
+Status of each criterion, the protocol used to measure them and why it replaced the earlier single-level comparison: [model_selection.md](model_selection.md). Note that ASHRAE Guideline 14 sets CV-RMSE ≤ 30 % for hourly data and ≤ 15 % for monthly data (see `RESEARCH_GUIDE.md` §4.4); the 10 % threshold above is stricter than the guideline and is pending confirmation by the team.
+
 ## Where new contributors plug in
 
 | Module | Module leader from Task 3 | Open work items |
@@ -115,6 +122,7 @@ Selection criteria (Task 3.4):
 | `wind_model.py` | Víctor Cardeña | Add additional turbine catalog entries |
 | `battery_model.py` | Aaron Cuevas | Add capacity-fade model |
 | `hres_simulator.py` | Daniel Leiva / Aaron | Add diesel genset backup |
-| `ml_models.py` | José Llashag / Regina | Hyperparameter optimization (Optuna) |
+| `ml_models.py` | José Llashag / Regina | Hyperparameter optimization for DT / RF / SVM (only the NN is tuned so far) |
+| `tuning.py` | Braulio | Measure inference on the Pi 5; tune the baselines with the same nested folds |
 | `validation.py` | Miguel Garduño | Physics-constraint checking |
 | Notebooks | Arturo Cruz | Add ipywidgets for community-facing UI |
