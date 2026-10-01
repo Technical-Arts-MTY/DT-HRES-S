@@ -39,3 +39,8 @@ data/raw_local/
 
 # Runtime telemetry logs (4D methodology — Tracking principle)
 results/telemetry/*.jsonl
+
+# Tuning runs (smoke checks and local verification)
+results/tuning/smoke/
+results/tuning/local/
+results/tuning/*.log
