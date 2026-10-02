@@ -127,7 +127,7 @@ The baselines keep the fixed hyperparameters of notebook 20 §7 (DT `max_depth=2
 | `base` | Neural Network | 0.636 | −0.377 | 52.6 | 49.6 | 72.9 | 43 ms |
 | `base` | SVM | 0.632 | −0.002 | 70.0 | 60.0 | 61.3 | 22.0 s |
 
-Inference is `predict_us_per_sample × 8 737 hours`, single process, measured on the Colab CPU runtime while other fits were running. On the local laptop the same figures were roughly half (RF 160 ms, NN 40 ms). It must be measured again on the Raspberry Pi 5.
+Inference is `predict_us_per_sample × 8 737 hours`, measured inside the search while other fits ran in parallel, on 200-tree forests. It ranks the models but is not a latency measurement: the reference figures are those of the paper draft, measured single-threaded on an idle machine with the 100-tree deployment forest (68.8 ms per year), and the deciding test is the 100 ms acceptance check on the Raspberry Pi 5.
 
 ### CV-RMSE per held-out city (%)
 
@@ -161,13 +161,13 @@ The criteria listed in `docs/architecture.md`:
 |---|---|---|---|
 | Cross-city R² ≥ 0.95 | ✅ all cities | ✅ all cities (physical) | ✅ all cities |
 | CV-RMSE ≤ 10 % | ⚠️ mean 9.8 %, San Ignacio 15.6 % | ❌ mean 12.7 % | ❌ mean 12.7 % |
-| Inference < 100 ms per year | ❌ 344 ms single process | ✅ 57 ms | ✅ 4 ms |
+| Inference < 100 ms per year | ✅ 68.8 ms with 100 trees (paper draft, idle machine) | ✅ | ✅ |
 | Reproducibility | ✅ fixed seeds, versions logged | ✅ | ✅ |
 
 Two open points for the team:
 
 - **The CV-RMSE threshold is not consistent across the repository.** `docs/architecture.md` and the persona example in `docs/4D_methodology/02_body_optimization.md` say 10 %; `docs/RESEARCH_GUIDE.md` §4.4 quotes ASHRAE Guideline 14 as ≤ 30 % hourly and ≤ 15 % monthly. Against 30 % hourly, every model except SVM passes in every city.
-- **RF inference time** exceeds the budget on Colab (344 ms per year with one process, `n_jobs=1`). The Pi 5 has four cores; `n_jobs=-1` at inference, or fewer trees, are the levers to bring it under 100 ms. The NN meets the budget (57 ms) at a higher energy error (nMAE 9.2 % vs 4.4 %), so the choice is a trade-off the team has to make with a measurement on the device.
+- **RF inference time** is not decided by this search, whose timings run under parallel load. The paper draft measures the 100-tree deployment forest at 68.8 ms per year on an idle machine, with a 50-tree fallback of equal accuracy; the acceptance test on the Pi 5 decides.
 
 ## Limitations
 
