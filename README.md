@@ -76,7 +76,7 @@ The observer instrument sits apart and connects at the back. Its acrylic walls l
 
 <h2 align="center">From Colab to the Raspberry Pi</h2>
 
-Training lives in Google Colab and stays there. The dataset is generated with the repository's physics simulation, sweeping panel, turbine and battery sizes over the typical meteorological years of four cities. On that dataset, a decision tree, random forest, support vector machine and neural network are trained and compared, with leave-one-city-out validation, which measures how the model responds at a site it has never seen.
+Training lives in Google Colab and stays there. The dataset is generated with the repository's physics simulation, sweeping panel, turbine and battery sizes over the typical meteorological years of four cities. On that dataset, a decision tree, random forest, support vector machine and neural network are trained and compared, with leave-one-city-out validation, which measures how the model responds at a site it has never seen. The validation is nested: hyperparameters are chosen without the held-out city, so that city keeps standing in for a site with no data. The comparison, and why it replaced the earlier single-level one, is in the [model selection record](docs/model_selection.md).
 
 Only the result is copied to the Raspberry Pi: the winning model, serialized with joblib, and the preloaded meteorological data. The device does not train, it only runs inference, and that inference runs on the Pi's CPU in milliseconds. It carries no AI accelerator because the random forest does not need one; that decision is revisited only if a heavier model shows a measurable advantage in latency and accuracy on the actual hardware.
 
@@ -84,7 +84,7 @@ Only the result is copied to the Raspberry Pi: the winning model, serialized wit
 |---|---|
 | Dataset generation | Colab |
 | Training and comparison of the four algorithms | Colab |
-| Leave-one-city-out validation | Colab |
+| Nested leave-one-city-out validation | Colab |
 | Serialization of the winning model | Colab |
 | Inference on the community's demand | Raspberry Pi |
 | Local sensor readings | Raspberry Pi |
@@ -186,6 +186,8 @@ DT-HRES-S
 [4D Methodology](docs/4D_methodology/)
 
 [Research Guide](docs/RESEARCH_GUIDE.md)
+
+[Model Selection](docs/model_selection.md)
 
 <h2 align="center">License</h2>
 

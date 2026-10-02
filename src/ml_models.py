@@ -8,11 +8,16 @@ Wraps the four algorithms required by Task 3.3 of the project:
     4. Neural Network        (universal approximator)
 
 All models share the same interface so they can be benchmarked
-fairly in `notebooks/10_model_comparison_validation.ipynb`.
+fairly in `notebooks/20_raspberry_deployment.ipynb`, section 7.
 
 The target variable is the **hourly PV-array AC power** (or any other
 quantity from the physics simulator). The features are weather data
 plus calendar variables.
+
+Hyperparameter search and model selection live in `src/tuning.py`
+(nested leave-one-city-out). The functions here keep fixed
+hyperparameters and are kept for the earlier notebooks.
+See docs/model_selection.md.
 """
 from __future__ import annotations
 
@@ -29,7 +34,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 
-# Default features for the DT (digital twin) regression problem
+# Default features for the DT (digital twin) regression problem.
+# For the PV target, elevation_m, atm_pressure_atm, rel_humidity_pct,
+# wind_dir_deg and month are never read by pv_model.simulate(); a model
+# that extrapolates (NN, SVM) fails on Mexico City because of the first
+# two. tuning.PHYSICAL_FEATURES is the subset the PV physics reads.
 DEFAULT_FEATURES = [
     'ghi_Wm2', 'dni_proj_Wm2', 'dhi_Wm2',
     'dry_bulb_C', 'rel_humidity_pct',
@@ -156,6 +165,10 @@ def leave_one_city_out(df_all: pd.DataFrame,
 
     This is the strongest validation for a digital twin meant to generalize
     to new locations (e.g., Ixil, Yucatán).
+
+    Hyperparameters are fixed (make_models). Do not pick a configuration
+    from these scores and report them as well: the held-out city would
+    take part in the choice. tuning.run() nests the selection instead.
     """
     if features is None:
         features = DEFAULT_FEATURES.copy()

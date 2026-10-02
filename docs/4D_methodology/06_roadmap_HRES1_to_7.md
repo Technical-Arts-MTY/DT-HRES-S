@@ -142,7 +142,7 @@
 
 **What's working today:**
 - The 4 ML models (DT, RF, SVM, NN) predict instantaneous power given instantaneous weather. This is **now-casting**.
-- Cross-validation across cities ✅
+- Cross-validation across cities ✅ — nested leave-one-city-out with NN tuning, see [model_selection.md](../model_selection.md)
 
 **What's missing for true forecasting:**
 - **Time-series features** — using past 24/48/72 hours of weather as input

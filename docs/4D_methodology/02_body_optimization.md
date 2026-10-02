@@ -192,6 +192,8 @@ Cross-validation results (leave-one-city-out):
 ✓ Random Forest selected as production model
 ```
 
+The numbers above show the format only. Measured values, from nested leave-one-city-out over the four cities, are in [model_selection.md](../model_selection.md): Random Forest leads with worst-city R² = 0.986 and mean CV-RMSE = 9.8 %, and the per-city table shows that San Ignacio, not the mean, is where the 10 % threshold is missed.
+
 ---
 
 🟡 **Status**: Concept clear, interface sketch ready, implementation pending. Carlos + Aaron + Arturo are responsible for completing this dimension.

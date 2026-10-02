@@ -43,6 +43,10 @@
 | Wind power | Power curve interpolation | `wind_model.py` |
 | Battery SoC | `SoC(t+1) = SoC(t) + η·P_in·Δt / E_max` | `battery_model.py` |
 
+## Inputs read by the PV model
+
+`pv_model.simulate()` reads 9 of the 20 columns: `day_of_year`, `hour`, `latitude`, `longitude` (solar position), `ghi_Wm2`, `dhi_Wm2`, `dni_proj_Wm2` (plane-of-array irradiance) and `dry_bulb_C`, `wind_speed_ms` (cell temperature). Surrogates of `p_pv_W` use this subset (`tuning.PHYSICAL_FEATURES`): `elevation_m` and `atm_pressure_atm` only affect wind power, and Mexico City lies far outside their range in the other cities, which made models that extrapolate fail there. See `docs/model_selection.md`, decision D1.
+
 ## Data quality notes
 
 - **GHI vs DHI consistency:** for clear-sky midday hours, GHI ≈ DNI·cos(θ_z) + DHI. This identity is used in `tests/test_data_quality.py`.
