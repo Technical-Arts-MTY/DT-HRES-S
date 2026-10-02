@@ -112,29 +112,29 @@ The baselines keep the fixed hyperparameters of notebook 20 §7 (DT `max_depth=2
 
 ## Results
 
-> **Source:** local verification run, 2026-10-01 — Python 3.14.6, scikit-learn 1.9.1, numpy 2.5.3, pandas 3.0.6, 16 CPU cores, 896 fits in 14.5 min. The official Colab run writes the same tables to `MyDrive/DT-HRES-S/tuning/colab`; small differences are expected from library versions. Every run stores its versions in `run.json`.
+> **Source:** official Colab run, 2026-10-01 — Python 3.13.15, scikit-learn 1.6.1, numpy 2.1.3, pandas 2.2.3, joblib 1.6.0, 2 CPU cores, 896 fits in 61 min. A local verification run (Python 3.14.6, scikit-learn 1.9.1, numpy 2.5.3, pandas 3.0.6, 16 CPU cores, 14.5 min) gave identical NN, RF and SVM scores to three decimals and the same selected configurations; Decision Tree scores differ by at most 0.2 percentage points of CV-RMSE. The result therefore holds across three scikit-learn minor versions.
 
 ### Summary — mean over held-out cities, seeds averaged
 
 | Features | Model | R² mean | R² worst | CV-RMSE % | nMAE % | MAPE day % | Inference, 1 year |
 |---|---|---|---|---|---|---|---|
-| `physical` | **Random Forest** | **0.994** | **0.986** | **9.8** | **4.4** | **9.3** | 160 ms |
-| `physical` | Decision Tree | 0.990 | 0.983 | 12.8 | 5.7 | 10.9 | 2 ms |
-| `physical` | Neural Network | 0.990 | 0.980 | 12.7 | 9.2 | 16.4 | 40 ms |
-| `physical` | SVM | 0.873 | 0.607 | 39.2 | 33.0 | 37.8 | 11.3 s |
-| `base` | Random Forest | 0.994 | 0.986 | 10.0 | 4.5 | 9.5 | 151 ms |
-| `base` | Decision Tree | 0.989 | 0.982 | 13.7 | 6.0 | 11.7 | 5 ms |
+| `physical` | **Random Forest** | **0.994** | **0.986** | **9.8** | **4.4** | **9.3** | 344 ms |
+| `physical` | Decision Tree | 0.990 | 0.983 | 12.7 | 5.7 | 11.0 | 4 ms |
+| `physical` | Neural Network | 0.990 | 0.980 | 12.7 | 9.2 | 16.4 | 57 ms |
+| `physical` | SVM | 0.873 | 0.607 | 39.2 | 33.0 | 37.8 | 18.5 s |
+| `base` | Random Forest | 0.994 | 0.986 | 10.0 | 4.5 | 9.5 | 294 ms |
+| `base` | Decision Tree | 0.989 | 0.982 | 13.9 | 6.0 | 11.8 | 4 ms |
 | `base` | Neural Network | 0.636 | −0.377 | 52.6 | 49.6 | 72.9 | 43 ms |
-| `base` | SVM | 0.632 | −0.002 | 70.0 | 60.0 | 61.3 | 15.9 s |
+| `base` | SVM | 0.632 | −0.002 | 70.0 | 60.0 | 61.3 | 22.0 s |
 
-Inference is `predict_us_per_sample × 8 737 hours`, single process, measured on a laptop while other fits were running. It must be measured again on the Raspberry Pi 5.
+Inference is `predict_us_per_sample × 8 737 hours`, single process, measured on the Colab CPU runtime while other fits were running. On the local laptop the same figures were roughly half (RF 160 ms, NN 40 ms). It must be measured again on the Raspberry Pi 5.
 
 ### CV-RMSE per held-out city (%)
 
 | Features | Model | Campeche | Mexico City | Monterrey | San Ignacio |
 |---|---|---|---|---|---|
 | `physical` | Random Forest | 6.1 | 10.0 | 7.6 | 15.6 |
-| `physical` | Decision Tree | 9.0 | 13.3 | 11.6 | 17.2 |
+| `physical` | Decision Tree | 9.0 | 12.6 | 11.9 | 17.2 |
 | `physical` | Neural Network | 12.4 | 10.3 | 9.7 | 18.4 |
 | `base` | Neural Network | 19.4 | **150.9** | 11.7 | 28.4 |
 
@@ -160,14 +160,14 @@ The criteria listed in `docs/architecture.md`:
 | Criterion | RF | NN | DT |
 |---|---|---|---|
 | Cross-city R² ≥ 0.95 | ✅ all cities | ✅ all cities (physical) | ✅ all cities |
-| CV-RMSE ≤ 10 % | ⚠️ mean 9.8 %, San Ignacio 15.6 % | ❌ mean 12.7 % | ❌ mean 12.8 % |
-| Inference < 100 ms per year | ⚠️ 160 ms single process | ✅ 40 ms | ✅ 2 ms |
+| CV-RMSE ≤ 10 % | ⚠️ mean 9.8 %, San Ignacio 15.6 % | ❌ mean 12.7 % | ❌ mean 12.7 % |
+| Inference < 100 ms per year | ❌ 344 ms single process | ✅ 57 ms | ✅ 4 ms |
 | Reproducibility | ✅ fixed seeds, versions logged | ✅ | ✅ |
 
 Two open points for the team:
 
 - **The CV-RMSE threshold is not consistent across the repository.** `docs/architecture.md` and the persona example in `docs/4D_methodology/02_body_optimization.md` say 10 %; `docs/RESEARCH_GUIDE.md` §4.4 quotes ASHRAE Guideline 14 as ≤ 30 % hourly and ≤ 15 % monthly. Against 30 % hourly, every model except SVM passes in every city.
-- **RF inference time** was measured with one process (`n_jobs=1`) on a loaded laptop. The Pi 5 has four cores; `n_jobs=-1` at inference, or fewer trees, are the levers if it exceeds the budget on the device.
+- **RF inference time** exceeds the budget on Colab (344 ms per year with one process, `n_jobs=1`). The Pi 5 has four cores; `n_jobs=-1` at inference, or fewer trees, are the levers to bring it under 100 ms. The NN meets the budget (57 ms) at a higher energy error (nMAE 9.2 % vs 4.4 %), so the choice is a trade-off the team has to make with a measurement on the device.
 
 ## Limitations
 
